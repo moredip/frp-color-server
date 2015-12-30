@@ -1,0 +1,15 @@
+{
+  "name": "frp-color-server",
+  "version": "1.0.0",
+  "description": "A node service for sharing colors, implemented using RxJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pete Hodgson",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "rx": "^4.0.7",
+    "rx-node": "^1.0.1"
+  }
+}
