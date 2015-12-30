@@ -9,6 +9,7 @@
   "author": "Pete Hodgson",
   "license": "Apache-2.0",
   "dependencies": {
+    "express": "^4.13.3",
     "rx": "^4.0.7",
     "rx-node": "^1.0.1"
   }
