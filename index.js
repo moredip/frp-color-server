@@ -36,59 +36,35 @@ function attachObservableToSocketObserver(eventName,observable,observer){
 
 var socketConnections = observableFromSocketServer(io);
 
-function observerForEventEmitter(eventEmitter){
-  function onNext(payload){
-    eventEmitter.emit(payload.event,payload.data);
+function returnChannelFor(eventEmitter,eventName){
+  return function(e){
+    eventEmitter.emit(eventName,e);
   }
-
-  function onError(err){
-    eventEmitter.emit('error',err); // TODO: is this a good convention?
-    eventEmitter.removeAllListeners(); // TODO: is this legit?
-  }
-
-  function onComplete(){
-    eventEmitter.emit('end'); // TODO: is this a good convention?
-    eventEmitter.removeAllListeners(); // TODO: is this legit?
-  }
-
-  return Rx.Observer.create(onNext,onError,onComplete).checked();
 }
 
-socketConnections = socketConnections.tap(
-  function (x)   { console.log('new socket!'); },
-  function (err) { console.log('Socket Error:', err); },
-  function ()    { console.log('Socket Completed'); }
-);
-
-//socketConnections.subscribe(function(socket){
-  //socket.on('ping',function(p){
-    //console.log('GOT A PING',p);
-  //});
-//});
-
+var rets = [];
+socketConnections.subscribe(function(socket){
+  var ret = returnChannelFor(socket,'pong');
+  rets.push(ret);
+});
 
 var pings = socketConnections.flatMap(function(socket){
-  var returnChannel = observerForEventEmitter(socket);
+  var ret = returnChannelFor(socket,'pong');
 
   var pingStream = observableFromSocket(socket,'ping');
-  var pingStream = pingStream.tap(
-    function (x)   { console.log('new ping!', x); },
-    function (err) { console.log('Socket Error:', err); },
-    function ()    { console.log('Socket Completed'); }
-  );
   return pingStream.map(function(data){
     return {
       data: data,
-      returnChannel: returnChannel
+      ret: ret
     };
   });
 });
 
 pings.subscribe( function(payload){
-  console.log('got a ping',payload.data);
-  console.log('sending a pong');
-  var response = Rx.Observable.of('pong!');
-  attachObservableToSocketObserver('pong',response,payload.returnChannel);
+  var response = (payload.data.toUpperCase());
+  rets.forEach( function(ret){
+    ret(response);
+  });
 });
 
 const roomRequests = new Rx.Subject(); 
