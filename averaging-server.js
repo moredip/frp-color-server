@@ -30,18 +30,33 @@ const sendNumberReqs = requests$.filter(function(e){
 
 const numbers = sendNumberReqs.map( function(e){
   const sender = e.req.cookies.CLIENT_UID || 'anonymous';
+  const received = Date.now();
   return {
     number: e.req.body.number,
     sender: sender,
+    received: received,
     responder: e.responder
   };
 });
 
 numbers.subscribe( function(o){
-  console.log(`got ${o.number} from ${o.sender}`);
   o.responder.next('GOT IT!');
   o.responder.complete();
 });
+
+const allClientNumbers = numbers.scan(function(allClientEntries,numberMsg){
+  const thisClientsEntry = {
+    number: numberMsg.number,
+    timestamp: numberMsg.received
+  };
+  const change = {
+    [numberMsg.sender]: thisClientsEntry
+  };
+
+  return Object.assign( {}, allClientEntries, change );
+},{});
+
+allClientNumbers.subscribe( x => console.log(x) );
 
 const port = (process.argv[2] || 8000);
 server.listen(port, undefined, function(){

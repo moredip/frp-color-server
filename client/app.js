@@ -13,6 +13,7 @@
   }
 
   var numbers = Rx.Observable.fromEvent($slider,'input',valueFromEvent)
+    .startWith($slider.val())
     .map( parseFloat )
     .map( function(v){ return Math.round(1000*v); } )
 
