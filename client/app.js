@@ -1,3 +1,9 @@
+
+
 (function(){
-  $.post('/sendNumber', {sender:'asdf',number:1003});
+  if( !Cookies.get('CLIENT_UID') ){
+    Cookies.set('CLIENT_UID',uuid(),{ expires: Infinity });
+  }
+
+  $.post('/sendNumber', {number:1003});
 }());

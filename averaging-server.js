@@ -1,6 +1,7 @@
 const Url = require('url');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const app = express();
 const server = require('http').Server(app);
 
@@ -16,6 +17,8 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
+app.use(cookieParser());
+
 const requests$ = createRequestStream(app);
 
 requests$.subscribe( e => console.log( e.req.method, 'request to', e.req.url ) );
@@ -26,9 +29,10 @@ const sendNumberReqs = requests$.filter(function(e){
 });
 
 const numbers = sendNumberReqs.map( function(e){
+  const sender = e.req.cookies.CLIENT_UID || 'anonymous';
   return {
     number: e.req.body.number,
-    sender: e.req.body.sender,
+    sender: sender,
     responder: e.responder
   };
 });
