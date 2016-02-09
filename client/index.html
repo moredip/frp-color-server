@@ -3,22 +3,18 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="css/app.css">
     <script src="vendor/jquery.min.js"></script> 
     <script src="vendor/cookies.min.js"></script> 
     <script src="vendor/uuid.js"></script> 
-    <script src="vendor/rx.all.min.js"></script> 
+    <script src="vendor/Rx.umd.min.js"></script> 
   </head>
   <body>
     <main>
-      <!--<section class="buttons">-->
-        <!--<button id="send-color">send color</button>-->
-        <!--<button id="change-color">different color</button>-->
-      <!--</section>-->
-      <!--<section class="pub-explain">-->
-        <!--<p>-->
-          <!--You're sending colors to <a target="frp-sub" href="sub.html">here</a>.-->
-        <!--</p>-->
-      <!--</section>-->
+      <section class="slider slider-to-label">
+        <input type="range" min="0" max="1" step="0.001">
+        <span class="label">____</span>
+      </section>
     </main>
   <script src="app.js"></script> 
   </body>
