@@ -1,4 +1,11 @@
 (function(){
+  var socket = io();
+  socket.on('numbers', function(numbers){
+    console.log('numbers!',numbers);
+  });
+
+
+
   var POST_THROTTLE_IN_MS = 200;
 
   if( !Cookies.get('CLIENT_UID') ){

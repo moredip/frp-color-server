@@ -4,7 +4,7 @@
   "description": "A node service for sharing colors, implemented using RxJS",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node averaging-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Pete Hodgson",

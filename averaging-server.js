@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const app = express();
 const server = require('http').Server(app);
+const socketServer = require('socket.io')(server);
 
 const createRequestStream = require('./lib/createRequestStream');
-
 
 app.get('/',function(req,res){
   res.redirect("/client");
@@ -19,6 +19,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 app.use(cookieParser());
 
+function broadcastNumbersToSocketClients(numbers){
+  socketServer.emit('numbers',numbers);
+}
+
 const requests$ = createRequestStream(app);
 
 requests$.subscribe( e => console.log( e.req.method, 'request to', e.req.url ) );
@@ -30,7 +34,7 @@ const sendNumberReqs = requests$.filter(function(e){
 
 const numbers = sendNumberReqs.map( function(e){
   const sender = e.req.cookies.CLIENT_UID || 'anonymous';
-  const received = Date.now();
+  const received = new Date();
   return {
     number: e.req.body.number,
     sender: sender,
@@ -56,7 +60,9 @@ const allClientNumbers = numbers.scan(function(allClientEntries,numberMsg){
   return Object.assign( {}, allClientEntries, change );
 },{});
 
-allClientNumbers.subscribe( x => console.log(x) );
+allClientNumbers.subscribe( x => console.log(JSON.stringify(x,undefined,2)) );
+
+allClientNumbers.subscribe( broadcastNumbersToSocketClients );
 
 const port = (process.argv[2] || 8000);
 server.listen(port, undefined, function(){
