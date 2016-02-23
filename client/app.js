@@ -1,8 +1,23 @@
 (function(){
-  var socket = io();
-  socket.on('numbers', function(numbers){
-    console.log('numbers!',numbers);
-  });
+  function renderMumbers(mumbers){
+    ReactDOM.render(
+      Mumber.renderMumberLine(mumbers),
+      document.getElementById('mumber-line-container')
+    );
+  }
+
+  renderMumbers([]);
+
+  //var socket = io();
+
+  //var numbers$ = Rx.Observable.fromEventPattern(
+      //function add(handler){
+        //socket.on('numbers',handler);
+      //},
+
+  //socket.on('numbers', function(numbers){
+    //console.log('numbers!',numbers);
+  //});
 
 
 
@@ -21,12 +36,16 @@
 
   var numbers = Rx.Observable.fromEvent($slider,'input',valueFromEvent)
     .startWith($slider.val())
-    .map( parseFloat )
-    .map( function(v){ return Math.round(1000*v); } )
+    .map( parseFloat );
 
-  numbers.subscribe( function(n){ $label.text(n) } );
+  numbers.subscribe( function(n){ renderMumbers([n]); } );
 
-  numbers
+  var percentages = numbers.map( function(v){ return Math.round(1000*v); } )
+  percentages.subscribe( function(n){ $label.text(n) } );
+
+  numbers.subscribe( function(n){ renderMumbers([n]); } );
+
+  percentages
     .throttleTime(POST_THROTTLE_IN_MS)
     .subscribe( function(n){ $.post('/sendNumber',{number:n}) } );
 }());

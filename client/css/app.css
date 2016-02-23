@@ -53,3 +53,15 @@ section.slider {
     margin: 0 0.5em;
     min-width: 2.5em;
     text-align: right; }
+
+.social-numbers {
+  margin-top: 40px;
+}
+
+.social-numbers__number-line {
+  stroke: #aaa;
+  stroke-width: 3px; }
+
+.social-numbers__mumber-marker {
+  stroke: #333;
+  stroke-width: 2px; }
