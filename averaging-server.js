@@ -36,7 +36,7 @@ const numbers = sendNumberReqs.map( function(e){
   const sender = e.req.cookies.CLIENT_UID || 'anonymous';
   const received = new Date();
   return {
-    number: e.req.body.number,
+    number: parseFloat(e.req.body.number),
     sender: sender,
     received: received,
     responder: e.responder

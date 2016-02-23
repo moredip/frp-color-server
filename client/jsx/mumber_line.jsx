@@ -1,10 +1,12 @@
 window.Mumber = window.Mumber || {};
 
+(function(){
+
 Mumber.renderMumberLine = function renderMumberLine(mumbers){
   var FULL_WIDTH=400;
 
   var lines = mumbers.map(function(mumber,ix){
-    var x = ""+(400*mumber)+"px";
+    var x = ""+(400*mumber.number)+"px";
     return <line key={ix} className="social-numbers__mumber-marker" x1={x} y1="5" x2={x} y2="35"></line>
   });
 
@@ -20,3 +22,5 @@ Mumber.renderMumberLine = function renderMumberLine(mumbers){
     </section>
   );
 }
+
+}());
