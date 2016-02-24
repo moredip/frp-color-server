@@ -66,6 +66,6 @@
   percentages.subscribe( function(n){ $label.text(n) } );
 
   numbers
-    .throttleTime(POST_THROTTLE_IN_MS)
+    .inspectTime(POST_THROTTLE_IN_MS)
     .subscribe( function(n){ $.post('/sendNumber',{number:n}) } );
 }());
