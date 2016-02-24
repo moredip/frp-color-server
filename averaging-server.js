@@ -64,7 +64,7 @@ allClientNumbers.subscribe( x => console.log(JSON.stringify(x,undefined,2)) );
 
 allClientNumbers.subscribe( broadcastNumbersToSocketClients );
 
-const port = (process.argv[2] || 8000);
+const port = (process.env.PORT || 8000);
 server.listen(port, undefined, function(){
   console.log(`\nserver running @ http://localhost:${port}/\n\n`);
 });
